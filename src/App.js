@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import AddModal from "./component/AddModal";
+import MoviesList from "./component/MoviesList";
+import Search from "./component/Search";
+import { data } from "./moviesData";
 
-function App() {
+import "./App.css";
+
+export default function App() {
+  const [moviesData, setMoviesData] = useState(data);
+
+  const [search, setSearch] = useState("");
+  const addMovies = (newMovies) => {
+    setMoviesData([...moviesData, { ...newMovies, id: Math.random() }]);
+    sessionStorage.setItem(
+      "moviesData",
+      JSON.stringify([...moviesData, { ...newMovies, id: Math.random() }])
+    );
+  };
+  console.log(moviesData);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Search search={search} setSearch={setSearch} />
+
+      <MoviesList moviesData={moviesData} search={search}/>
+      <AddModal addMovies={addMovies} />
     </div>
   );
 }
-
-export default App;
